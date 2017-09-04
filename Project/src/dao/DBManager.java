@@ -13,8 +13,7 @@ public class DBManager {
      * DBへ接続するコネクションを返す
      */
     public static Connection getConnection() {
-
-        Connection con = null;
+    		Connection con = null;
         try {
         		Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url,user,pass);

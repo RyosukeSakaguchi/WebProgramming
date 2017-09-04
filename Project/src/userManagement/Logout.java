@@ -2,7 +2,6 @@ package userManagement;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,16 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class UserDetail
+ * Servlet implementation class Logout
  */
-@WebServlet("/UserDetail")
-public class UserDetail extends HttpServlet {
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserDetail() {
+	public Logout() {
 		super();
 	}
 
@@ -38,19 +37,15 @@ public class UserDetail extends HttpServlet {
 			// LoginScreenへリダイレクト
 			response.sendRedirect("LoginScreen");
 		} else {
-			// リクエストパラメータの取得
-			String id = request.getParameter("id");
+			// セッションの情報を消去
+			session.removeAttribute("loginUser");
 
-		    // リクエストスコープに保存するインスタンス(JavaBeans)の生成
-			UserInfo userInfo = new UserInfo();
+			//ログアウト成功のメッセージをリクエストスコープに保存
+			request.setAttribute("logout", "ログアウトしました。");
 
-			// ユーザーを探してuserInfoに代入
-			userInfo = dao.UserInfoDao.findAll(id);
-			request.setAttribute("userInfo", userInfo);
-
-			// userDetail.jspへフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDetail.jsp");
-			dispatcher.forward(request, response);
+			// LoginScreenのdoGetメソッドを実行
+			LoginScreen loginScreen = new LoginScreen();
+			loginScreen.doGet(request, response);
 		}
 	}
 
@@ -60,7 +55,7 @@ public class UserDetail extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// doGetメソッドを実行
+		//doGetメソッドを実行
 		doGet(request, response);
 	}
 

@@ -23,7 +23,6 @@ public class LoginScreen extends HttpServlet {
 	 */
 	public LoginScreen() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -32,9 +31,18 @@ public class LoginScreen extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// フォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginScreen.jsp");
-		dispatcher.forward(request, response);
+		// HttpSessionインスタンスの取得
+		HttpSession session = request.getSession();
+
+		// セッションにログイン情報があるかないかで分岐
+		if ((UserInfo) session.getAttribute("loginUser") == null) {
+			// loginScreen.jspへフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginScreen.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			// UserListへリダイレクト
+			response.sendRedirect("UserList");
+		}
 	}
 
 	/**
@@ -51,34 +59,35 @@ public class LoginScreen extends HttpServlet {
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 
+		//暗号化されたパスワードを生成
 		String encPass = null;
-
 		try {
-			encPass = Common.Encrpt(password);
+			encPass = Common.encrpt(password);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 
+		//ログインができるかできないかを判断
 		if (!dao.UserInfoDao.userCheck(loginId, encPass)) {
 			request.setAttribute("errMsg", "ログインIDまたはパスワードが異なります。");
-			// フォワード
+			request.setAttribute("loginId", loginId);
+			// loginScreen.jspへフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginScreen.jsp");
 			dispatcher.forward(request, response);
 		} else {
-
 			// セッションスコープに保存するインスタンス(JavaBeans)の生成
 			UserInfo userInfo = new UserInfo();
 
+			// ユーザーを探し出し、userInfoに代入
 			userInfo = dao.UserInfoDao.findAll(loginId, encPass);
 
 			// HttpSessionインスタンスの取得
 			HttpSession session = request.getSession();
 
 			// セッションスコープにインスタスを保存
-			session.setAttribute("userInfo", userInfo);
+			session.setAttribute("loginUser", userInfo);
 
-			// フォワード
+			// UserListへリダイレクト
 			response.sendRedirect("UserList");
 		}
 

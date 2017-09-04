@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class UserDelete
@@ -16,47 +17,81 @@ import javax.servlet.http.HttpServletResponse;
 public class UserDelete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UserDelete() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-		String id = request.getParameter("id");
-		UserInfo userInfo = new UserInfo();
-		userInfo = dao.UserInfoDao.findAll(id);
-		request.setAttribute("userInfo", userInfo);
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDelete.jsp");
-		dispatcher.forward(request, response);
+	public UserDelete() {
+		super();
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// HttpSessionインスタンスの取得
+		HttpSession session = request.getSession();
 
+		// セッションにログイン情報があるかないかで分岐
+		if ((UserInfo) session.getAttribute("loginUser") == null) {
+			// LoginScreenへリダイレクト
+			response.sendRedirect("LoginScreen");
+		} else if (request.getParameter("id") == null) {
+			// userDelete.jspへフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDelete.jsp");
+			dispatcher.forward(request, response);
+		} else {
+			// リクエストパラメータの取得
+			String id = request.getParameter("id");
 
+			// リクエストスコープに保存するインスタンス(JavaBeans)の生成
+			UserInfo userInfo = new UserInfo();
+
+			// ユーザーを探してuserInfoに代入
+			userInfo = dao.UserInfoDao.findAll(id);
+			request.setAttribute("userInfo", userInfo);
+
+			// userDelete.jspへフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userDelete.jsp");
+			dispatcher.forward(request, response);
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// リクエストパラメータの文字コードを指定
+		request.setCharacterEncoding("UTF-8");
+
+		// リクエストパラメータの取得
 		String id = request.getParameter("id");
 
-		dao.UserInfoDao.userDel(id);
+		// リクエストスコープにパラメーターがあるかで分岐
+		if (id == null) {
+			// 全てのユーザーを消去するメソッドを実行
+			dao.UserInfoDao.allUserDel();
 
-		request.setAttribute("sucMsg", "ユーザー情報の削除に成功しました。");
+			//全てのユーザー消去成功のメッセージをリクエストスコープに保存
+			request.setAttribute("sucMsg", "全ユーザー情報の削除に成功しました。");
 
-		UserList userList = new UserList();
+			// UserListのdoGetメソッドを実行
+			UserList userList = new UserList();
+			userList.doGet(request, response);
+		} else {
+			// ユーザーを消去するメソッドを実行
+			dao.UserInfoDao.userDel(id);
 
-		userList.doGet(request, response);
+			//ユーザー消去成功のメッセージをリクエストスコープに保存
+			request.setAttribute("sucMsg", "ユーザー情報の削除に成功しました。");
 
-//		response.sendRedirect("UserList");
-
+			// UserListのdoGetメソッドを実行
+			UserList userList = new UserList();
+			userList.doGet(request, response);
+		}
 	}
 
 }

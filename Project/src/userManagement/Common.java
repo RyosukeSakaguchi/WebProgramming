@@ -9,7 +9,12 @@ import javax.xml.bind.DatatypeConverter;
 
 public class Common {
 
-	public static String Encrpt(String password) throws NoSuchAlgorithmException {
+	/**パスワードを暗号化するメソッド
+	 * @param password
+	 * @return 暗号化されたパスワード
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static String encrpt(String password) throws NoSuchAlgorithmException {
 		//ハッシュを生成したい元の文字列
 		String source = password;
 		//ハッシュ生成前にバイト配列に置き換える際のCharset

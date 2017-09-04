@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@charset "UTF-8";
+
 html, body, div.background {
 	height: 100%; /* 「div.background」に対してはmin-heightに対応していないブラウザ用 */
 	margin: 0;
@@ -12,56 +14,25 @@ div.background {
 }
 
 body>div.background {
-	height: auto;
-	要素を超えた分の背景が伸びないブラウザ用
+	height: auto; /* 要素を超えた分の背景が伸びないブラウザ用 */
 }
 
-h1 {
-	position: relative;
-	background: #dfefff;
-	box-shadow: 0px 0px 0px 5px #dfefff;
-	border: dashed 2px white;
-	padding: 0.2em 0.5em;
-	color: #454545;
-}
-
-h1:after {
-	position: absolute;
-	content: '';
-	left: -7px;
-	top: -7px;
-	border-width: 0 0 15px 15px;
-	border-style: solid;
-	border-color: #fff #fff #a8d4ff;
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
-}
-
-h3 {
+body{
 	position: relative;
 	margin: 0;
 	height: 100%;
 	background-color: #ffffe7;
 	background-image: linear-gradient(rgba(241, 207, 164, 0.5) .1em,
 		transparent .1em);
-	background-size: 100% 1.5em;
+	background-size: 100% 2.5em;
 	line-height: 1.5em;
 }
 
-h3:after {
-	position: relative;
-	margin: 0;
-	background-color: #ffffe7;
-	background-image: linear-gradient(rgba(241, 207, 164, 0.5) .1em,
-		transparent .1em);
-	background-size: 100% 1.5em;
-	line-height: 1.5em;
-}
 
 @font-face {
 	font-family: font-demo1;
 	src: url("HuiFont29.eot"); /*For IE*/
-	src: url("HuiFont29.woff") format("woff"), /*For Modern browser*/
-  url("HuiFont29.ttf") format("truetype"); /*For iOS Android*/
+	src: url("HuiFont29.ttf") format("truetype"); /*For iOS Android*/
 }
 
 pencil {
@@ -73,7 +44,7 @@ pencil {
 
 .blackbutton {
 	display: inline-block;
-	padding: .02em 0.3em;
+	padding: .6em 0.5em;
 	border: 2px solid #333;
 	background-color: #ffffe7;
 	border-radius: 2em .4em 1em .4em/.3em 1em .4em 2em;
@@ -84,7 +55,7 @@ pencil {
 
 .redbutton {
 	display: inline-block;
-	padding: .02em 0.3em;
+	padding: .6em 0.3em;
 	border: 2px solid #F00;
 	background-color: #ffffe7;
 	border-radius: 2em .4em 1em .4em/.3em 1em .4em 2em;
@@ -95,7 +66,7 @@ pencil {
 
 .bluebutton {
 	display: inline-block;
-	padding: .02em 0.3em;
+	padding: .6em 0.3em;
 	border: 2px solid #0000ff;
 	background-color: #ffffe7;
 	border-radius: 2em .4em 1em .4em/.3em 1em .4em 2em;
@@ -113,7 +84,6 @@ input[type="text"] {
 	font-size: 1em;
 	text-indent: 0.7em;
 }
-
 input[type="text"]:focus {
 	background: #ffffe7;
 	border: 2px solid #333;
@@ -128,7 +98,6 @@ input[type="password"] {
 	font-size: 1em;
 	text-indent: 0.7em;
 }
-
 input[type="password"]:focus {
 	background: #ffffe7;
 	border: 2px solid #333;
@@ -143,7 +112,6 @@ input[type="date"] {
 	font-size: 1em;
 	text-indent: 0.7em;
 }
-
 input[type="date"]:focus {
 	background: #ffffe7;
 	border: 2px solid #333;
@@ -151,4 +119,5 @@ input[type="date"]:focus {
 
 .wrapper {
 	display: flex;
-}
+	justify-content: center;
+ }

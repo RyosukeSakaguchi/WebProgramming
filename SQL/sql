@@ -1,0 +1,4 @@
+CREATE DATABASE userInfo;
+USE userInfo;
+CREATE TABLE user (id SERIAL PRIMARY KEY UNIQUE Not Null, login_id varchar(255) UNIQUE Not Null, name varchar(255) Not Null, birth_date DATE Not Null, password varchar(255) Not Null, create_date DATETIME Not Null, update_date DATETIME Not Null);
+INSERT INTO user (login_id, name, birth_date, password, create_date, update_date) VALUES ('admin', '管理者', '1993-04-03', '2918D885D9A6CAABA26796E3AD827A08', '2017-09-02 23:48:27', '2017-09-02 23:48:27');

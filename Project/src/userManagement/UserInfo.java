@@ -15,7 +15,6 @@ public class UserInfo implements Serializable {
 
 	}
 
-
 	public UserInfo(String id, String loginId, String name, String birthDate, String password, String createDate, String updateDate) {
 		this.id = id;
 		this.loginId = loginId;
